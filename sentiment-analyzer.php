@@ -20,6 +20,7 @@ $sa_dafault_keywords = array(
     'neutral' => array( 'normal', 'average' )
 );
 
+
 // Sentiment analysis on save posts
 
 function sa_analyze_sentiment_on_save_post($post_id, $post ) {
@@ -28,8 +29,30 @@ function sa_analyze_sentiment_on_save_post($post_id, $post ) {
      return;
     }
 
-}
+    // Condition to process only post
+    if($post !== $post -> post_type) {
+        return;
+    }
 
+    $sa_post_content = strip_tags($post -> post_content);
+
+    $default_selected_sentiment = 'neutral';
+
+
+}
 
 // Call Save Post hook
 add_action('save_post','sa_analyze_sentiment_on_save_post');
+
+
+// keywords Counter function
+function sa_count_keywords($content, $keywords){
+    $count = 0;
+
+    foreach($keywords as $keyword){
+        $count += substr_count($content, strtolower($keyword));
+    }
+
+    return $count;
+
+}
