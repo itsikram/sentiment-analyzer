@@ -14,6 +14,9 @@
 .sa-post-container a:hover {
   text-decoration: none;
 }
+.sa-post-container a:focus {
+  outline: 0 !important;
+}
 .sa-post-container .sa-list-container {
   list-style: none;
   padding: 0;
@@ -139,4 +142,82 @@
   text-align: center;
   color: red;
   margin: 10px;
+}
+
+.sentiment-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 5px;
+  background-color: #6C757D;
+}
+
+.sentiment-badge.positive {
+  background-color: rgb(25, 135, 84);
+}
+
+.sentiment-badge.negative {
+  background-color: rgb(220, 53, 69);
+}
+
+.sentiment-badge.neutral {
+  background-color: rgb(13, 202, 240);
+}
+
+@media only screen and (max-width: 768px) {
+  .sa-post-container {
+    max-width: 100% !important;
+    width: 100%;
+    padding: 50px 0;
+  }
+  .sa-post-container .sa-title {
+    font-size: 28px;
+    font-weight: 500;
+  }
+  .sa-post-container .sa-list-container .sa-list-item {
+    cursor: pointer;
+  }
+  .sa-post-container .sa-list-container .sa-list-item .sa-list-content-container {
+    padding: 8px !important;
+  }
+  .sa-post-container .sa-list-container .sa-list-item .sa-list-content-container .sa-list-title {
+    font-size: 18px;
+    margin: 0 !important;
+  }
+  .sa-post-container .sa-list-container .sa-list-item .sa-list-content-container .sa-list-content {
+    font-size: 16px;
+    margin: 0 !important;
+  }
+  .sa-post-container .sa-list-container .sa-list-item .sa-list-content-container .sa-list-button {
+    margin: 0 !important;
+    margin-top: 5px !important;
+    font-size: 14px;
+  }
+  .sa-post-container .sa-grid-container {
+    width: 100%;
+  }
+  .sa-post-container .sa-grid-container .sa-grid-item {
+    width: 100%;
+    margin-bottom: 20px !important;
+    cursor: pointer;
+  }
+  .sa-post-container .sa-grid-container .sa-grid-item .sa-grid-content-container {
+    padding: 10px !important;
+    text-align: center;
+  }
+  .sa-post-container .sa-grid-container .sa-grid-item .sa-grid-content-container .sa-grid-title {
+    font-size: 22px;
+  }
+  .sa-post-container .sa-grid-container .sa-grid-item .sa-grid-content-container .sa-grid-content {
+    margin: 0 !important;
+  }
+  .sa-post-container .sa-grid-container .sa-grid-item .sa-grid-content-container .sa-grid-button {
+    font-size: 14px !important;
+  }
 }/*# sourceMappingURL=style.css.map */

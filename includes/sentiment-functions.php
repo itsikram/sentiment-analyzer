@@ -120,24 +120,24 @@ function sa_filter_shortcode($atts, $content)
                 $sa_query->the_post();
 
                 $post_title = wp_trim_words(get_the_title(),5,'...');
-                $post_content = wp_trim_words(wp_strip_all_tags(get_the_content()),15,'...');
+                $post_content = wp_trim_words(wp_strip_all_tags(get_the_content()),30,'...');
                 $thumbnail_ulr = get_the_post_thumbnail_url();
                 $post_permalink = get_permalink();
                 $thumbnail_ulr = get_the_post_thumbnail_url();
 
                 $list_container .= '<li class="sa-list-item">';
 
-                $list_container .= '<div class="sa-list-image-container"><img decoding="async" class="sa-list-image" src="'.$thumbnail_ulr.'" alt="'.$post_title.'"></div>';
+                $list_container .= '<div class="sa-list-image-container"><a href="'.$post_permalink.'"><img decoding="async" class="sa-list-image" src="'.$thumbnail_ulr.'" alt="'.$post_title.'"></a></div>';
                 // $list_container .= '<img class="sa-list-image" src="'.$thumbnail_ulr.'" alt="'.$post_title.'" />';
 
 
-                $list_container.= '<div class="sa-list-content-container">';
+                $list_container.= '<div class="sa-list-content-container"><a href="'.$post_permalink.'">';
 
                 $list_container .= '<h3 class="sa-list-title">'.$post_title.'</h3>';
                 $list_container .= '<p class="sa-list-content">'.$post_content.'</p>';
                 $list_container .= '<a class="sa-list-button" href="'.$post_permalink.'">Read More</a>';
 
-                $list_container .= '</div>';
+                $list_container .= '</a></div>';
 
                 $list_container .= '</li>';
             }
