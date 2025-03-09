@@ -13,16 +13,16 @@ function sa_default_keywords()
 
 
 // Sentiment analysis on save posts
-function sa_analyze_sentiment_on_save_post($post_id, $post)
+function sa_analyze_sentiment_on_save_post($post_id)
 {
-
-
+    $post = get_post( $post_id );
+    
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
         return;
     }
 
     // Condition to process only post
-    if ($post !== $post->post_type) {
+    if ('post' !== $post->post_type) {
         return;
     }
 
@@ -35,16 +35,14 @@ function sa_analyze_sentiment_on_save_post($post_id, $post)
     // Count Positive, Negative and Neutral keywords
     $positive_count = sa_count_keywords($sa_post_content, $sa_keywords['positive']);
     $negative_count = sa_count_keywords($sa_post_content, $sa_keywords['negative']);
-    $neutral_count = sa_count_keywords($sa_post_content, $sa_keywords['neutral']);
 
-    if ($positive_count > 0 && $negative_count > 0) {
-        if ($positive_count > $neutral_count) {
-            $sa_sentiment = 'positive';
-        } else {
-            $sa_sentiment = 'negative';
-        }
+    if ($positive_count > $negative_count) {
+        $sa_sentiment = 'positive';
+    } else if($positive_count < $negative_count) {
+        $sa_sentiment = 'negative';
+    }else {
+        $sa_sentiment = 'neutral';
     }
-
     // store sentiment as post meta
     update_post_meta($post_id, '_post_sentiment', $sa_sentiment);
 }
@@ -110,49 +108,44 @@ function sa_filter_shortcode($atts, $content)
 
     $post_container = '<div class="sa-post-container">';
 
-    if($sa_query -> have_posts()) {
+    if ($sa_query->have_posts()) {
 
         // Create variable for output results
 
-        if($sentiment_display === 'list') {
+        if ($sentiment_display === 'list') {
             $list_container = '<ul class="sa-list-container">';
-            while($sa_query -> have_posts()) {
-                $sa_query -> the_post();
-    
-                $list_container .= '<li class="sa-list-item">';
-                $list_container .= '<a href="'.get_permalink().'">'.get_the_title().'</a>';
-                $list_container .= '</li>';
+            while ($sa_query->have_posts()) {
+                $sa_query->the_post();
 
+                $list_container .= '<li class="sa-list-item">';
+                $list_container .= '<a href="' . get_permalink() . '">' . get_the_title() . '</a>';
+                $list_container .= '</li>';
             }
             $list_container .= '</ul>';
             $post_container .= $list_container;
-        }
-        elseif( $sentiment_display === 'grid') {
+        } elseif ($sentiment_display === 'grid') {
             $grid_container = '<div class="sa-grid-container">';
-            while($sa_query -> have_posts()) {
+            while ($sa_query->have_posts()) {
 
-                $sa_query -> the_post();
-    
+                $sa_query->the_post();
+
                 $grid_container .= '<div class="sa-grid-item">';
 
                 $grid_container .= '<div class="sa-grid-image-container">';
-                $grid_container .= '<img class="sa-grid-image" src="'.get_the_post_thumbnail_url().'" alt="'.get_the_title().'">';
+                $grid_container .= '<img class="sa-grid-image" src="' . get_the_post_thumbnail_url() . '" alt="' . get_the_title() . '">';
                 $grid_container .= '</div>';
-                $grid_container .= '<h3 class="sa-grid-title">'.get_the_title().'</h3>';
-                $grid_container.= '<p class="sa-grid-content">'.get_the_content().'</p>';
-                $grid_container.= '<a class="sa-grid-button" href="'.get_permalink().'">Read More</a>';
-    
+                $grid_container .= '<h3 class="sa-grid-title">' . get_the_title() . '</h3>';
+                $grid_container .= '<p class="sa-grid-content">' . get_the_content() . '</p>';
+                $grid_container .= '<a class="sa-grid-button" href="' . get_permalink() . '">Read More</a>';
+
                 $grid_container .= '</div>';
-    
             }
             $grid_container .= '</div>';
 
             $post_container .= $grid_container;
         }
-
-
     }
     $post_container .= '</div';
-    
+
     return $post_container;
 }
