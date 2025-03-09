@@ -103,7 +103,6 @@ function sa_display_sentiment_badge($title){
     return $title;
 
 
-
 }
 
 add_filter( 'the_title', 'sa_display_sentiment_badge' );
