@@ -14,16 +14,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // sa Default Keywords
-$sa_dafault_keywords = array(
-    'positive' => array( 'good', 'happy', 'excellent', 'amazing' ),
-    'negative' => array( 'bad', 'sad', 'terrible', 'awful' ),
-    'neutral' => array( 'normal', 'average' )
-);
+function sa_default_keywords (){
+
+    return array(
+        'positive' => array( 'good', 'happy', 'excellent', 'amazing' ),
+        'negative' => array( 'bad', 'sad', 'terrible', 'awful' ),
+        'neutral' => array( 'normal', 'average' )
+    );
+    
+} 
 
 
 // Sentiment analysis on save posts
 
 function sa_analyze_sentiment_on_save_post($post_id, $post ) {
+
 
     if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
      return;
@@ -37,6 +42,13 @@ function sa_analyze_sentiment_on_save_post($post_id, $post ) {
     $sa_post_content = strip_tags($post -> post_content);
 
     $default_selected_sentiment = 'neutral';
+
+    $sa_keywords = sa_default_keywords();
+
+    // Count Positive, Negative and Neutral keywords
+    $positive_count = sa_count_keywords($sa_post_content, $sa_keywords['positive']);
+    $negative_count = sa_count_keywords($sa_post_content, $sa_keywords['negative']);
+    $neutral_count = sa_count_keywords($sa_post_content, $sa_keywords['neutral']);
 
 
 }
