@@ -53,7 +53,7 @@ function sa_count_keywords($content, $keywords)
     $count = 0;
 
     foreach ($keywords as $keyword) {
-        $count += substr_count($content, strtolower($keyword));
+        $count += substr_count(strtolower($content), strtolower($keyword));
     }
 
     return $count;
@@ -68,11 +68,9 @@ function sa_display_sentiment_badge($title)
     $the_sentiment = ucwords(get_post_meta($post->ID, '_post_sentiment', true));
     $sentiment_class = strtolower($the_sentiment);
 
-    if (is_single()) {
-        $sentiment_badge = '<span class="sentiment-badge '.$sentiment_class.'">'.$the_sentiment.'</span>';
+    $sentiment_badge = '<span class="sentiment-badge '.$sentiment_class.'">'.$the_sentiment.'</span>';
 
-        return $title . ' ' . $sentiment_badge;
-    }
+    return $title . ' ' . $sentiment_badge;
 
     return $title;
 }
