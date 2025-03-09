@@ -82,6 +82,7 @@ function sa_filter_shortcode($atts, $content)
     $atts = shortcode_atts(array(
         'sentiment' => 'positive',
         'display' => 'list',
+        'title' => 'Sentiment Filter',
     ), $atts);
 
     // trim double quotes from shortcode atts value sentiment
@@ -89,6 +90,9 @@ function sa_filter_shortcode($atts, $content)
 
     // trim double quotes from shortcode atts value display
     $sentiment_display = str_replace('"', '', $atts['display']);
+
+    // trim double quotes from shortcode atts value title
+    $sentiment_title = str_replace('"', '', $atts['title']);
 
     // Santiment Query Arguments
     $sa_query_args = array(
@@ -103,6 +107,9 @@ function sa_filter_shortcode($atts, $content)
 
     $post_container = '<div class="sa-post-container">';
 
+    if(!empty($sentiment_title)) {
+        $post_container .= '<h3 class="sa-title">'.$sentiment_title.'</h3>';
+    }
     if ($sa_query->have_posts()) {
 
         // Create variable for output results
@@ -112,35 +119,70 @@ function sa_filter_shortcode($atts, $content)
             while ($sa_query->have_posts()) {
                 $sa_query->the_post();
 
+                $post_title = wp_trim_words(get_the_title(),5,'...');
+                $post_content = wp_trim_words(wp_strip_all_tags(get_the_content()),15,'...');
+                $thumbnail_ulr = get_the_post_thumbnail_url();
+                $post_permalink = get_permalink();
+                $thumbnail_ulr = get_the_post_thumbnail_url();
+
                 $list_container .= '<li class="sa-list-item">';
-                $list_container .= '<a href="' . get_permalink() . '">' . get_the_title() . '</a>';
+
+                $list_container .= '<div class="sa-list-image-container"><img decoding="async" class="sa-list-image" src="'.$thumbnail_ulr.'" alt="'.$post_title.'"></div>';
+                // $list_container .= '<img class="sa-list-image" src="'.$thumbnail_ulr.'" alt="'.$post_title.'" />';
+
+
+                $list_container.= '<div class="sa-list-content-container">';
+
+                $list_container .= '<h3 class="sa-list-title">'.$post_title.'</h3>';
+                $list_container .= '<p class="sa-list-content">'.$post_content.'</p>';
+                $list_container .= '<a class="sa-list-button" href="'.$post_permalink.'">Read More</a>';
+
+                $list_container .= '</div>';
+
                 $list_container .= '</li>';
             }
+
+
             $list_container .= '</ul>';
+
             $post_container .= $list_container;
+
+
+
         } elseif ($sentiment_display === 'grid') {
             $grid_container = '<div class="sa-grid-container">';
             while ($sa_query->have_posts()) {
-
                 $sa_query->the_post();
 
-                $grid_container .= '<div class="sa-grid-item">';
+                $post_title = wp_trim_words(get_the_title(),5,'...');
+                $post_content = wp_trim_words(wp_strip_all_tags(get_the_content()),15,'...');
+                $thumbnail_ulr = get_the_post_thumbnail_url();
+                $post_permalink = get_permalink();
+
+                $grid_container .= '<div class="sa-grid-item"><a href="'.$post_permalink.'">';
 
                 $grid_container .= '<div class="sa-grid-image-container">';
-                $grid_container .= '<img class="sa-grid-image" src="' . get_the_post_thumbnail_url() . '" alt="' . get_the_title() . '">';
+                $grid_container .= '<img class="sa-grid-image" src="' . $thumbnail_ulr . '" alt="' . $post_title . '">';
                 $grid_container .= '</div>';
-                $grid_container .= '<h3 class="sa-grid-title">' . get_the_title() . '</h3>';
-                $grid_container .= '<p class="sa-grid-content">' . get_the_content() . '</p>';
-                $grid_container .= '<a class="sa-grid-button" href="' . get_permalink() . '">Read More</a>';
-
+                $grid_container .= '<div class="sa-grid-content-container">';
+                $grid_container .= '<h3 class="sa-grid-title">' . $post_title . '</h3>';
+                $grid_container .= '<p class="sa-grid-content">' . $post_content . '</p>';
+                $grid_container .= '<a class="sa-grid-button" href="' . $post_permalink . '">Read More</a>';
                 $grid_container .= '</div>';
+                $grid_container .= '</a></div>';
             }
             $grid_container .= '</div>';
 
             $post_container .= $grid_container;
         }
+    }else {
+        $post_container .= '<p class="no-post_found"> No Post Found </p>';
     }
     $post_container .= '</div';
 
     return $post_container;
+}
+
+function sa_enqueue_stylesheet(){
+    wp_enqueue_style('sentiment-analyzer',SA_PLUGIN_DIR_URL.'/assets/css/style.css',array(),false);
 }

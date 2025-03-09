@@ -1,0 +1,142 @@
+.sa-post-container {
+  max-width: 100% !important;
+  width: 100%;
+  padding: 50px 0;
+}
+.sa-post-container .sa-title {
+  font-size: 38px;
+  text-align: center;
+  font-weight: 500;
+}
+.sa-post-container a {
+  text-decoration: none;
+}
+.sa-post-container a:hover {
+  text-decoration: none;
+}
+.sa-post-container .sa-list-container {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sa-post-container .sa-list-container .sa-list-item {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  transition: 0.3s;
+  margin-bottom: 20px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.sa-post-container .sa-list-container .sa-list-item .sa-list-image-container {
+  width: 30%;
+  float: left;
+  overflow: hidden;
+  line-height: 0 !important;
+}
+.sa-post-container .sa-list-container .sa-list-item .sa-list-image-container .sa-list-image {
+  width: 100%;
+}
+.sa-post-container .sa-list-container .sa-list-item .sa-list-content-container {
+  width: 65%;
+  float: left;
+  padding: 20px;
+}
+.sa-post-container .sa-list-container .sa-list-item .sa-list-content-container .sa-list-title {
+  margin: 0 !important;
+  font-size: 26px;
+  font-weight: 500;
+}
+.sa-post-container .sa-list-container .sa-list-item .sa-list-content-container .sa-list-content {
+  margin-top: 10px;
+  font-weight: 400;
+  color: #090909;
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+.sa-post-container .sa-list-container .sa-list-item .sa-list-content-container .sa-list-button {
+  font-size: 18px;
+  font-weight: 500;
+  padding: 5px 20px;
+  background: blue;
+  border-radius: 35px;
+  color: #fff;
+  text-decoration: none !important;
+  margin-top: 10px;
+  display: inline-block;
+  transition: 0.3s;
+}
+.sa-post-container .sa-list-container .sa-list-item .sa-list-content-container .sa-list-button:hover {
+  box-shadow: 0px 0px 3px 2px gray;
+}
+.sa-post-container .sa-list-container .sa-list-item:hover {
+  box-shadow: 0px 0px 4px 0px gray;
+}
+.sa-post-container .sa-grid-container {
+  width: 100%;
+}
+.sa-post-container .sa-grid-container a {
+  text-decoration: none;
+}
+.sa-post-container .sa-grid-container a:hover {
+  text-decoration: none;
+}
+.sa-post-container .sa-grid-container .sa-grid-item {
+  width: 32%;
+  float: left;
+  margin: 0.6%;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 20px !important;
+  overflow: hidden;
+  transition: 0.3s;
+}
+.sa-post-container .sa-grid-container .sa-grid-item .sa-grid-image-container {
+  width: 100%;
+  overflow: hidden;
+}
+.sa-post-container .sa-grid-container .sa-grid-item .sa-grid-image-container .sa-grid-image {
+  width: 100%;
+}
+.sa-post-container .sa-grid-container .sa-grid-item .sa-grid-content-container {
+  padding: 20px;
+}
+.sa-post-container .sa-grid-container .sa-grid-item .sa-grid-content-container .sa-grid-title {
+  margin: 0 !important;
+  font-size: 26px;
+  font-weight: 500;
+}
+.sa-post-container .sa-grid-container .sa-grid-item .sa-grid-content-container .sa-grid-content {
+  margin-top: 10px;
+  font-weight: 400;
+  color: #090909;
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+.sa-post-container .sa-grid-container .sa-grid-item .sa-grid-content-container .sa-grid-button {
+  font-size: 18px;
+  font-weight: 500;
+  padding: 5px 20px;
+  background: blue;
+  border-radius: 35px;
+  color: #fff;
+  text-decoration: none !important;
+  margin-top: 10px;
+  display: inline-block;
+  transition: 0.3s;
+}
+.sa-post-container .sa-grid-container .sa-grid-item .sa-grid-content-container .sa-grid-button:hover {
+  box-shadow: 0px 0px 3px 2px gray;
+}
+.sa-post-container .sa-grid-container .sa-grid-item:hover {
+  box-shadow: 0px 0px 4px 0px gray;
+}
+.sa-post-container .sa-grid-container::after {
+  clear: both;
+  overflow: hidden;
+}
+.sa-post-container .no-post_found {
+  font-size: 18px;
+  text-align: center;
+  color: red;
+  margin: 10px;
+}/*# sourceMappingURL=style.css.map */
