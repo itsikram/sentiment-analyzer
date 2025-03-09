@@ -16,6 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Define Plugin Directory
 define( 'SA_PLUGIN_DIR', value: plugin_dir_path( __FILE__ ) );
 
+define( 'SA_PLUGIN_DIR_URL', value: plugin_dir_url( __FILE__ ) );
+
 // Includes Sentiment Functions
 
 if(file_exists(SA_PLUGIN_DIR . 'includes/sentiment-functions.php')) {
@@ -30,3 +32,6 @@ add_filter( 'the_title', 'sa_display_sentiment_badge' );
 
 // Call add_shortcode hook to run shortcode functions
 add_shortcode( 'sentiment_filter', 'sa_filter_shortcode' );
+
+// Enqueue Stylesheet
+add_action('wp_enqueue_scripts', 'sa_enqueue_stylesheet');

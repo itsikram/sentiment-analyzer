@@ -1,0 +1,307 @@
+.sa-post-container {
+    max-width: 100% !important;
+    width: 100%;
+    padding: 50px 0;
+
+    .sa-title {
+        font-size: 38px;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: none;
+    }
+
+    a:focus {
+        outline: 0 !important;
+    }
+
+    .sa-list-container {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        .sa-list-item {
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            border-radius: 20px;
+            transition: 0.3s;
+            margin-bottom: 20px;
+            background-color: rgba(0, 0, 0, 0.1);
+
+            .sa-list-image-container {
+                width: 30%;
+                float: left;
+                overflow: hidden;
+                line-height: 0 !important;
+
+                .sa-list-image {
+                    width: 100%;
+                }
+            }
+
+            .sa-list-content-container {
+                width: 65%;
+                float: left;
+                padding: 20px;
+
+                .sa-list-title {
+                    margin: 0 !important;
+                    font-size: 26px;
+                    font-weight: 500;
+                }
+
+                .sa-list-content {
+                    margin-top: 10px;
+                    font-weight: 400;
+                    color: #090909;
+                    margin-bottom: 5px;
+                    font-size: 18px;
+                }
+
+                .sa-list-button {
+                    font-size: 18px;
+                    font-weight: 500;
+                    padding: 5px 20px;
+                    background: blue;
+                    border-radius: 35px;
+                    color: #fff;
+                    text-decoration: none !important;
+                    margin-top: 10px;
+                    display: inline-block;
+                    transition: 0.3s;
+                }
+
+                .sa-list-button:hover {
+                    box-shadow: 0px 0px 3px 2px gray;
+
+                }
+            }
+        }
+
+        .sa-list-item:hover {
+            box-shadow: 0px 0px 4px 0px gray;
+
+        }
+
+    }
+
+    .sa-grid-container {
+        width: 100%;
+
+        a {
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        .sa-grid-item {
+            width: 32%;
+            float: left;
+            margin: 0.60%;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 20px !important;
+            overflow: hidden;
+            transition: 0.3s;
+
+
+            .sa-grid-image-container {
+                width: 100%;
+                overflow: hidden;
+
+                .sa-grid-image {
+                    width: 100%;
+                }
+            }
+
+            .sa-grid-content-container {
+                padding: 20px;
+
+                .sa-grid-title {
+                    margin: 0 !important;
+                    font-size: 26px;
+                    font-weight: 500;
+                }
+
+                .sa-grid-content {
+                    margin-top: 10px;
+                    font-weight: 400;
+                    color: #090909;
+                    margin-bottom: 5px;
+                    font-size: 18px;
+                }
+
+                .sa-grid-button {
+                    font-size: 18px;
+                    font-weight: 500;
+                    padding: 5px 20px;
+                    background: blue;
+                    border-radius: 35px;
+                    color: #fff;
+                    text-decoration: none !important;
+                    margin-top: 10px;
+                    display: inline-block;
+                    transition: 0.3s;
+                }
+
+                .sa-grid-button:hover {
+                    box-shadow: 0px 0px 3px 2px gray;
+                }
+            }
+        }
+
+        .sa-grid-item:hover {
+            box-shadow: 0px 0px 4px 0px gray;
+
+        }
+
+
+
+
+
+    }
+
+    .sa-grid-container::after {
+        clear: both;
+        overflow: hidden;
+    }
+
+    .no-post_found {
+        font-size: 18px;
+        text-align: center;
+        color: red;
+        margin: 10px;
+    }
+}
+
+.sentiment-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 5px;
+    background-color: #6C757D;
+}
+
+.sentiment-badge.positive {
+    background-color: rgba(25,135,84,1);
+}
+
+
+.sentiment-badge.negative {
+    background-color: rgba(220,53,69,1);
+}
+
+
+.sentiment-badge.neutral {
+    background-color: rgba(13,202,240,1);
+}
+
+
+@media only screen and (max-width: 768px) {
+    .sa-post-container {
+        max-width: 100% !important;
+        width: 100%;
+        padding: 50px 0;
+
+        .sa-title {
+            font-size: 28px;
+            font-weight: 500;
+        }
+
+
+        .sa-list-container {
+
+
+            .sa-list-item {
+                cursor: pointer;
+
+                .sa-list-image-container {
+
+                    .sa-list-image {}
+                }
+
+                .sa-list-content-container {
+                    padding: 8px !important;
+
+                    .sa-list-title {
+                        font-size: 18px;
+                        margin: 0 !important;
+
+                    }
+
+                    .sa-list-content {
+                        font-size: 16px;
+                        margin: 0 !important;
+
+                    }
+
+                    .sa-list-button {
+                        margin: 0 !important;
+                        margin-top: 5px !important;
+                        font-size: 14px;
+
+                    }
+
+                }
+            }
+
+
+        }
+
+        .sa-grid-container {
+            width: 100%;
+
+
+            .sa-grid-item {
+                width: 100%;
+                margin-bottom: 20px !important;
+                cursor: pointer;
+
+                .sa-grid-image-container {
+
+
+                    .sa-grid-image {}
+                }
+
+                .sa-grid-content-container {
+                    padding: 10px !important;
+                    text-align: center;
+
+                    .sa-grid-title {
+                        font-size: 22px;
+                    }
+
+                    .sa-grid-content {
+                        margin: 0 !important
+                    }
+
+                    .sa-grid-button {
+                        font-size: 14px !important;
+                    }
+
+                }
+            }
+
+
+
+        }
+
+
+
+        .no-post_found {}
+    }
+}
