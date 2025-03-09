@@ -117,7 +117,7 @@ function sa_filter_shortcode($atts, $content)
             while ($sa_query->have_posts()) {
                 $sa_query->the_post();
 
-                $post_title = wp_trim_words(get_the_title(),5,'...');
+                $post_title = html_entity_decode(get_the_title());
                 $post_content = wp_trim_words(wp_strip_all_tags(get_the_content()),30,'...');
                 $thumbnail_ulr = get_the_post_thumbnail_url();
                 $post_permalink = get_permalink();
@@ -152,7 +152,7 @@ function sa_filter_shortcode($atts, $content)
             while ($sa_query->have_posts()) {
                 $sa_query->the_post();
 
-                $post_title = wp_trim_words(get_the_title(),5,'...');
+                $post_title = html_entity_decode(get_the_title());
                 $post_content = wp_trim_words(wp_strip_all_tags(get_the_content()),15,'...');
                 $thumbnail_ulr = get_the_post_thumbnail_url();
                 $post_permalink = get_permalink();
