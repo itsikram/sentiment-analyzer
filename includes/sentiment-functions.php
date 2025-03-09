@@ -65,16 +65,11 @@ function sa_display_sentiment_badge($title)
 
     global $post;
 
-    $sentiment = get_post_meta($post->ID, '_post_sentiment', true);
+    $the_sentiment = ucwords(get_post_meta($post->ID, '_post_sentiment', true));
+    $sentiment_class = strtolower($the_sentiment);
 
     if (is_single()) {
-        if ($sentiment == 'positive') {
-            $sentiment_badge = '<span class="sentiment-badge positive">Positive</span>';
-        } elseif ($sentiment == 'negative') {
-            $sentiment_badge = '<span class="sentiment-badge negative">Negative</span>';
-        } else {
-            $sentiment_badge = '<span class="sentiment-badge neutral">Neutral</span>';
-        }
+        $sentiment_badge = '<span class="sentiment-badge '.$sentiment_class.'">'.$the_sentiment.'</span>';
 
         return $title . ' ' . $sentiment_badge;
     }
