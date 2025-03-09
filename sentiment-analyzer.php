@@ -23,8 +23,10 @@ if(file_exists(SA_PLUGIN_DIR . 'includes/sentiment-functions.php')) {
 }
 
 // Call Save Post hook
-add_action('save_post','sa_analyze_sentiment_on_save_post');
+add_action('save_post', 'sa_analyze_sentiment_on_save_post');
 
 // Display Sentiment Badge with post title
 add_filter( 'the_title', 'sa_display_sentiment_badge' );
 
+// Call add_shortcode hook to run shortcode functions
+add_shortcode( 'sentiment_filter', 'sa_filter_shortcode' );
