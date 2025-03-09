@@ -13,6 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+// Define Plugin Directory
+define( 'SA_PLUGIN_DIR', value: plugin_dir_path( __FILE__ ) );
+
+// Includes Sentiment Functions
+
+if(file_exists(SA_PLUGIN_DIR . 'includes/sentiment-functions.php')) {
+    require_once(SA_PLUGIN_DIR . 'includes/sentiment-functions.php');
+}
 
 // Call Save Post hook
 add_action('save_post','sa_analyze_sentiment_on_save_post');
