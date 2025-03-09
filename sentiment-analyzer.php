@@ -41,7 +41,7 @@ function sa_analyze_sentiment_on_save_post($post_id, $post ) {
 
     $sa_post_content = strip_tags($post -> post_content);
 
-    $default_selected_sentiment = 'neutral';
+    $sa_sentiment = 'neutral'; // Default Sentiment
 
     $sa_keywords = sa_default_keywords();
 
@@ -50,6 +50,16 @@ function sa_analyze_sentiment_on_save_post($post_id, $post ) {
     $negative_count = sa_count_keywords($sa_post_content, $sa_keywords['negative']);
     $neutral_count = sa_count_keywords($sa_post_content, $sa_keywords['neutral']);
 
+    if($positive_count > 0 && $negative_count > 0) {
+        if( $positive_count > $neutral_count) {
+            $sa_sentiment = 'positive';
+        }else {
+            $sa_sentiment = 'negative';
+        }
+    }
+
+    // store sentiment as post meta
+    update_post_meta($post_id, '_post_sentiment', $sa_sentiment);
 
 }
 
