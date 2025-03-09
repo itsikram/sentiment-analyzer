@@ -78,3 +78,33 @@ function sa_count_keywords($content, $keywords){
     return $count;
 
 }
+
+
+// Display Sentiment Badge with post title
+
+function sa_display_sentiment_badge($title){
+
+    global $post;
+
+    $sentiment = get_post_meta($post->ID, '_post_sentiment', true);
+
+    if (is_single()) {
+        if($sentiment == 'positive') {
+            $sentiment_badge = '<span class="sentiment-badge positive">Positive</span>';
+        } elseif($sentiment == 'negative') {
+            $sentiment_badge = '<span class="sentiment-badge negative">Negative</span>';
+        } else {
+            $sentiment_badge = '<span class="sentiment-badge neutral">Neutral</span>';
+        }
+    
+        return $title.' '. $sentiment_badge;
+    }
+
+    return $title;
+
+
+
+}
+
+add_filter( 'the_title', 'sa_display_sentiment_badge' );
+
