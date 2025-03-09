@@ -84,14 +84,14 @@ function sa_filter_shortcode($atts, $content)
     ), $atts);
 
     // trim double quotes from shortcode atts value sentiment
-    $sentiment_value = preg_replace('/“/',' ',str_replace('"', ' ', $atts['sentiment']));;
+    $sentiment_value = $atts['sentiment'];
     $sentiment_values_array = explode('|', $sentiment_value);
 
     // trim double quotes from shortcode atts value display
-    $sentiment_display = str_replace('"', '', $atts['display']);
+    $sentiment_display = $atts['display'];
 
     // trim double quotes from shortcode atts value title
-    $sentiment_title = str_replace('”', '', $atts['title']);
+    $sentiment_title = $atts['title'];
 
     // Santiment Query Arguments
     $sa_query_args = array(
