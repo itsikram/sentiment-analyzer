@@ -80,24 +80,30 @@ function sa_filter_shortcode($atts, $content)
     $atts = shortcode_atts(array(
         'sentiment' => 'positive',
         'display' => 'list',
-        'title' => 'Sentiment Filter',
+        'title' => '',
     ), $atts);
 
     // trim double quotes from shortcode atts value sentiment
-    $sentiment_value = str_replace('"', '', $atts['sentiment']);
+    $sentiment_value = preg_replace('/“/',' ',str_replace('"', ' ', $atts['sentiment']));;
+    $sentiment_values_array = explode('|', $sentiment_value);
 
     // trim double quotes from shortcode atts value display
     $sentiment_display = str_replace('"', '', $atts['display']);
 
     // trim double quotes from shortcode atts value title
-    $sentiment_title = str_replace('"', '', $atts['title']);
+    $sentiment_title = str_replace('”', '', $atts['title']);
 
     // Santiment Query Arguments
     $sa_query_args = array(
         'post_type' => 'post',
         'posts_per_page' => 10,
-        'meta_key' => '_post_sentiment',
-        'meta_value' => $sentiment_value
+        'meta_query' => array(
+            array(
+                'key' => '_post_sentiment',
+                'value' => $sentiment_values_array,
+                'compare' => 'IN'
+            )
+        )
     );
 
     $sa_query = new WP_Query($sa_query_args);
@@ -118,6 +124,8 @@ function sa_filter_shortcode($atts, $content)
                 $sa_query->the_post();
 
                 $post_title = html_entity_decode(get_the_title());
+                $post_title_text = wp_strip_all_tags(get_the_title());
+
                 $post_content = wp_trim_words(wp_strip_all_tags(get_the_content()),30,'...');
                 $thumbnail_ulr = get_the_post_thumbnail_url();
                 $post_permalink = get_permalink();
@@ -125,8 +133,7 @@ function sa_filter_shortcode($atts, $content)
 
                 $list_container .= '<li class="sa-list-item">';
 
-                $list_container .= '<div class="sa-list-image-container"><a href="'.$post_permalink.'"><img decoding="async" class="sa-list-image" src="'.$thumbnail_ulr.'" alt="'.$post_title.'"></a></div>';
-                // $list_container .= '<img class="sa-list-image" src="'.$thumbnail_ulr.'" alt="'.$post_title.'" />';
+                $list_container .= '<div class="sa-list-image-container"><a href="'.$post_permalink.'"><img decoding="async" class="sa-list-image" src="'.$thumbnail_ulr.'" alt="'.$post_title_text.'"></a></div>';
 
 
                 $list_container.= '<div class="sa-list-content-container"><a href="'.$post_permalink.'">';
@@ -153,6 +160,8 @@ function sa_filter_shortcode($atts, $content)
                 $sa_query->the_post();
 
                 $post_title = html_entity_decode(get_the_title());
+                $post_title_text = wp_strip_all_tags(get_the_title());
+
                 $post_content = wp_trim_words(wp_strip_all_tags(get_the_content()),15,'...');
                 $thumbnail_ulr = get_the_post_thumbnail_url();
                 $post_permalink = get_permalink();
@@ -160,7 +169,7 @@ function sa_filter_shortcode($atts, $content)
                 $grid_container .= '<div class="sa-grid-item"><a href="'.$post_permalink.'">';
 
                 $grid_container .= '<div class="sa-grid-image-container">';
-                $grid_container .= '<img class="sa-grid-image" src="' . $thumbnail_ulr . '" alt="' . $post_title . '">';
+                $grid_container .= '<img class="sa-grid-image" src="' . $thumbnail_ulr . '" alt="' . $post_title_text . '">';
                 $grid_container .= '</div>';
                 $grid_container .= '<div class="sa-grid-content-container">';
                 $grid_container .= '<h3 class="sa-grid-title">' . $post_title . '</h3>';
