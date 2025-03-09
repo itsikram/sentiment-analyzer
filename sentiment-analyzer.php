@@ -35,3 +35,17 @@ add_shortcode( 'sentiment_filter', 'sa_filter_shortcode' );
 
 // Enqueue Stylesheet
 add_action('wp_enqueue_scripts', 'sa_enqueue_stylesheet');
+
+
+// Call admin_menu Hook
+add_action( 'admin_menu', 'sa_admin_settings_page' );
+
+
+// Call admin_init hook
+add_action( 'admin_init', 'sa_register_admin_settings' );
+
+// add default keywords on plugin activation
+register_activation_hook(__FILE__,'add_default_keywords');
+
+// verify nonce
+add_action( 'admin_post_sa_save_keywords', 'sa_save_admin_page_settings' );
