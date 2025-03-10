@@ -127,7 +127,7 @@ function disable_transient_cache($transient, $value, $expiration)
 {
     $is_disable_cache = get_option('disable_cache') == 'yes' ? '1' : '0';
 
-    if($is_disable_cache === '1') {
+    if ($is_disable_cache === '1') {
         return false;
     }
     if (defined('WP_CACHE') && WP_CACHE) {
@@ -447,10 +447,8 @@ function sa_save_admin_page_settings()
     // Clear cache if checkbox is checked in admin settings page.
     if (isset($_POST['is_disable_cache'])) {
         update_option('is_disable_cache', '1');
-
-    }else {
+    } else {
         update_option('is_disable_cache', '0');
-
     }
 
     // Clear cache if checkbox is checked in admin settings page.
@@ -468,7 +466,6 @@ function sa_save_admin_page_settings()
     exit();
 }
 
-
 function ajax_clear_all_caches()
 {
 
@@ -483,5 +480,75 @@ function ajax_clear_all_caches()
     // Send Success Response after cache Cleared successfully
     do_action('sa_clear_all_cache');
     return wp_send_json_success(array('message' => __('Cache cleared successfully', 'sa')), 200);
+}
 
+function sa_register_sentiment_bulk_actions($bulk_actions)
+{
+
+    $bulk_actions['move_to_positive'] = __('Move to Positive', 'sa');
+    $bulk_actions['move_to_negative'] = __('Move to Negative', 'sa');
+    $bulk_actions['move_to_neutral'] = __('Move to Neutral', 'sa');
+
+    return $bulk_actions;
+}
+
+function sa_handle_sentiment_bulk_action($redirect, $action, $post_ids)
+{
+
+
+
+    $bulk_actions = array(
+        'move_to_positive',
+        'move_to_negative',
+        'move_to_neutral'
+    );
+
+    if (!in_array($action, $bulk_actions)) {
+        return $redirect;
+    }
+
+    $post_sentiment = '';
+
+    switch ($action) {
+        case 'move_to_positive':
+            
+            $post_sentiment = 'positive';
+            break;
+        case 'move_to_negative':
+            $post_sentiment = 'negative';
+            break;
+        case 'move_to_neutral':
+            $post_sentiment = 'neutral';
+            break;
+    }
+
+    foreach ($post_ids as $post_id) {
+        // update post sentiment
+        update_post_meta($post_id, '_post_sentiment', $post_sentiment);
+        do_action('sa_clear_all_cache');
+    }
+
+    $redirect_to = add_query_arg($action . '_bulk_action_done', count($post_ids), $redirect);
+
+    return $redirect_to;
+}
+
+
+function sa_bulk_action_sentiment_admin_notice()
+{
+
+    if (!empty($_REQUEST['move_to_positive_bulk_action_done'])) {
+        $count = intval($_REQUEST['move_to_positive_bulk_action_done']);
+        echo '<div class="updated notice is-dismissible"><p>Sentiment Bulk Action applied to ' . $count . ' posts.</p></div>';
+    }
+
+    if (!empty($_REQUEST['move_to_negative_bulk_action_done'])) {
+        $count = intval($_REQUEST['move_to_negative_bulk_action_done']);
+        echo '<div class="updated notice is-dismissible"><p>Sentiment Bulk Action applied to ' . $count . ' posts.</p></div>';
+    }
+
+    if (!empty($_REQUEST['move_to_neutral_bulk_action_done'])) {
+        $count = intval($_REQUEST['move_to_neutral_bulk_action_done']);
+        echo '<div class="updated notice is-dismissible"><p>Sentiment Bulk Action applied to ' . $count . ' posts.</p></div>';
+    }
 }

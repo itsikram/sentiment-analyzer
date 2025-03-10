@@ -61,6 +61,12 @@ register_activation_hook(__FILE__, 'sa_re_save_all_posts');
 // hook to verify nonce before save admin settings
 add_action('admin_post_save_sa_settings', 'sa_save_admin_page_settings');
 
+// add bulk actions
+add_filter('bulk_actions-edit-post', 'sa_register_sentiment_bulk_actions');
+
+add_filter('handle_bulk_actions-edit-post', 'sa_handle_sentiment_bulk_action', 10, 3);
+
+add_action('admin_notices', 'sa_bulk_action_sentiment_admin_notice');
 
 // Hook to clear cache with ajax
 add_action('wp_ajax_ajax_clear_sa_caches','ajax_clear_all_caches');
