@@ -14,6 +14,8 @@ This plugin analyzes post content for sentiment (positive, negative, neutral) ba
 - **sentiment**: Sentiment attribute accept following sentiments positive, negative and neutral. Multiple sentiments values can be give which is separeted by separeted by "|".
 - **title**: Title attribute accept any characters.
 - **display**: Display attribute accept only 2 values they are list and grid.
+- **posts_per_page**: This attribute will set posts limit per page.
+
 
 
 ## Installation
