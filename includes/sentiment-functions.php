@@ -494,9 +494,6 @@ function sa_register_sentiment_bulk_actions($bulk_actions)
 
 function sa_handle_sentiment_bulk_action($redirect, $action, $post_ids)
 {
-
-
-
     $bulk_actions = array(
         'move_to_positive',
         'move_to_negative',
@@ -507,29 +504,31 @@ function sa_handle_sentiment_bulk_action($redirect, $action, $post_ids)
         return $redirect;
     }
 
-    $post_sentiment = '';
+    function handle_sentiment_update($post_ids, $sentiment, $redirect )
+    {
+        foreach ($post_ids as $post_id) {
+            update_post_meta($post_id, '_post_sentiment', $sentiment);
+        }
+
+    };
 
     switch ($action) {
         case 'move_to_positive':
-            
-            $post_sentiment = 'positive';
+
+            handle_sentiment_update($post_ids, 'positive',$redirect);
             break;
         case 'move_to_negative':
-            $post_sentiment = 'negative';
+            handle_sentiment_update($post_ids, 'negative',$redirect);
             break;
         case 'move_to_neutral':
-            $post_sentiment = 'neutral';
+            handle_sentiment_update($post_ids, 'neutral',$redirect);
             break;
     }
 
-    foreach ($post_ids as $post_id) {
-        // update post sentiment
-        update_post_meta($post_id, '_post_sentiment', $post_sentiment);
-        do_action('sa_clear_all_cache');
-    }
+    do_action('sa_clear_all_cache');
 
-    $redirect_to = add_query_arg($action . '_bulk_action_done', count($post_ids), $redirect);
 
+    $redirect_to = add_query_arg($action. '_bulk_action_done', count($post_ids), $redirect);
     return $redirect_to;
 }
 
@@ -539,16 +538,16 @@ function sa_bulk_action_sentiment_admin_notice()
 
     if (!empty($_REQUEST['move_to_positive_bulk_action_done'])) {
         $count = intval($_REQUEST['move_to_positive_bulk_action_done']);
-        echo '<div class="updated notice is-dismissible"><p>Sentiment Bulk Action applied to ' . $count . ' posts.</p></div>';
+        echo '<div class="updated notice is-dismissible"><p>' . $count. __(' Posts Moved to Positive.','sa') . '</p></div>';
     }
 
     if (!empty($_REQUEST['move_to_negative_bulk_action_done'])) {
         $count = intval($_REQUEST['move_to_negative_bulk_action_done']);
-        echo '<div class="updated notice is-dismissible"><p>Sentiment Bulk Action applied to ' . $count . ' posts.</p></div>';
+        echo '<div class="updated notice is-dismissible"><p>' . $count .__(' Posts Moved to Negative.','sa'). '</p></div>';
     }
 
     if (!empty($_REQUEST['move_to_neutral_bulk_action_done'])) {
         $count = intval($_REQUEST['move_to_neutral_bulk_action_done']);
-        echo '<div class="updated notice is-dismissible"><p>Sentiment Bulk Action applied to ' . $count . ' posts.</p></div>';
+        echo '<div class="updated notice is-dismissible"><p>' . $count .__(' Posts Moved to Neutral.','sa'). '</p></div>';
     }
 }
