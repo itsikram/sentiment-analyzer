@@ -24,11 +24,9 @@
                     nonce: admin_ajax.nonce
                 },
                 success: function(response) {
-                    console.log(response);
-                    alert('Cache cleared successfully!')
+                    alert(response.data.message || 'Something went wrong');
                 },
                 error: function (error) {
-                    
                     console.log('Error:', error);
                 }
             })

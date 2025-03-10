@@ -477,15 +477,11 @@ function ajax_clear_all_caches()
 
     // Check if user allowed to clear cache
     if (!current_user_can('manage_options')) {
-        wp_send_json_error(__('Unauthorized access'));
+        return wp_send_json_error(__('Unauthorized access'));
     }
 
-    // Send Success Response if cache Cleared successfully
-    if (do_action('sa_clear_all_cache')) {
-        return wp_send_json_success(array('message' => __('Cache cleared successfully', 'sa')), 200);
-    } else {
-        return wp_send_json_success(array('message' => __('Someting Went Wrong', 'sa')), 200);
-    }
+    // Send Success Response after cache Cleared successfully
+    do_action('sa_clear_all_cache');
+    return wp_send_json_success(array('message' => __('Cache cleared successfully', 'sa')), 200);
 
-    return;
 }
