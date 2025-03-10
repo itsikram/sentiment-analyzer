@@ -163,21 +163,24 @@ function sa_filter_shortcode($atts, $content)
         'sentiment' => 'positive',
         'display' => 'list',
         'title' => '',
+        'posts_per_page' => 3
     ), $atts,'sentiment_filter');
 
+    // Get Current Page Number
+    $paged = isset($_REQUEST['page_number']) ? sanitize_text_field($_REQUEST['page_number']) : 1;
+    // $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
     // trim double quotes from shortcode atts value sentiment
     $sentiment_value =  $atts['sentiment'];
     $sentiment_values_array = explode('|', $sentiment_value);
 
-    // trim double quotes from shortcode atts value display
     $sentiment_display = $atts['display'];
 
-    // trim double quotes from shortcode atts value title
     $sentiment_title = $atts['title'];
+    $sentiment_post_per_page = $atts['posts_per_page'];
 
     // Create a unique cache transient kye
-    $sa_cache_posts_key = 'sa_cache_posts_html_' . md5(serialize($atts));
+    $sa_cache_posts_key = 'sa_cache_posts_html_' . md5(serialize($atts).$paged);
 
     $sa_query_cache = get_transient($sa_cache_posts_key);
 
@@ -190,7 +193,8 @@ function sa_filter_shortcode($atts, $content)
     // Santiment Query Arguments
     $sa_query_args = array(
         'post_type' => 'post',
-        'posts_per_page' => 10,
+        'posts_per_page' => $sentiment_post_per_page,
+        'paged'          => $paged,
         'meta_query' => array(
             array(
                 'key' => '_post_sentiment',
@@ -201,7 +205,6 @@ function sa_filter_shortcode($atts, $content)
     );
 
     $sa_query = new WP_Query($sa_query_args);
-
     $post_container = '<div class="sa-post-container">';
 
     if (!empty($sentiment_title)) {
@@ -210,6 +213,14 @@ function sa_filter_shortcode($atts, $content)
 
     if ($sa_query->have_posts()) {
         // Create variable for output results
+
+        $sa_pagination_links = paginate_links(array(
+            'total'   => $sa_query->max_num_pages,
+            'current' => $paged,
+            'format' => '?page_number=%#%',
+            'prev_text' => __('« Previous'),
+            'next_text' => __('Next »'),
+        ));
 
         if ($sentiment_display === 'list') {
             $list_container = '<ul class="sa-list-container">';
@@ -237,7 +248,9 @@ function sa_filter_shortcode($atts, $content)
             }
 
             $list_container .= '</ul>';
+            $list_paginations = '<div class="sa-list-pagination-container">'.$sa_pagination_links.'.</div>';
             $post_container .= $list_container;
+            $post_container .= $list_paginations;
             
         } elseif ($sentiment_display === 'grid') {
 
@@ -267,7 +280,11 @@ function sa_filter_shortcode($atts, $content)
             }
 
             $grid_container .= '</div>';
+
+            $grid_paginations = '<div class="sa-grid-pagination-container">'.$sa_pagination_links.'.</div>';
+
             $post_container .= $grid_container;
+            $post_container .= $grid_paginations;
         }
     } else {
         $post_container .= '<p class="no-post_found"> '.__('No Post Found','sa').' </p>';
