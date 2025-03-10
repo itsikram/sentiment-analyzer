@@ -1,6 +1,14 @@
 <?php
 
-// Add default options on plugin activation
+// load text domain on init
+function sa_load_textdomain() {
+
+    $language_dir = dirname( plugin_basename( __FILE__ ) ) . '/languages';
+    load_plugin_textdomain( 'sa', false, $language_dir );
+
+}
+
+// Add or Get options on plugin activation
 function sa_add_default_keywords()
 {
 
@@ -222,7 +230,7 @@ function sa_filter_shortcode($atts, $content)
 
                 $list_container .= '<h3 class="sa-list-title">' . $post_title . '</h3>';
                 $list_container .= '<p class="sa-list-content">' . $post_content . '</p>';
-                $list_container .= '<a class="sa-list-button" href="' . $post_permalink . '">Read More</a>';
+                $list_container .= '<a class="sa-list-button" href="' . $post_permalink . '">'.__('Read More','sa').'</a>';
 
                 $list_container .= '</a></div>';
                 $list_container .= '</li>';
@@ -252,7 +260,7 @@ function sa_filter_shortcode($atts, $content)
                 $grid_container .= '<div class="sa-grid-content-container">';
                 $grid_container .= '<h3 class="sa-grid-title">' . $post_title . '</h3>';
                 $grid_container .= '<p class="sa-grid-content">' . $post_content . '</p>';
-                $grid_container .= '<a class="sa-grid-button" href="' . $post_permalink . '">Read More</a>';
+                $grid_container .= '<a class="sa-grid-button" href="' . $post_permalink . '">'.__('Read More','sa').'</a>';
                 $grid_container .= '</div>';
 
                 $grid_container .= '</a></div>';
@@ -262,7 +270,7 @@ function sa_filter_shortcode($atts, $content)
             $post_container .= $grid_container;
         }
     } else {
-        $post_container .= '<p class="no-post_found"> No Post Found </p>';
+        $post_container .= '<p class="no-post_found"> '.__('No Post Found','sa').' </p>';
     }
     $post_container .= '</div>';
 
@@ -292,7 +300,7 @@ function sa_admin_scripts()
 function sa_admin_settings_page()
 {
     // Add new page in wordpress dashboard menu
-    add_menu_page('Sentiment Analyzer Settings', 'Sentiment Analyzer', 'manage_options', 'sentiment-analyzer-settings', 'sa_render_admin_settings_page', 'dashicons-chart-line', 30);
+    add_menu_page(__('Sentiment Analyzer Settings','sa'), __('Sentiment Analyzer','sa'), 'manage_options', 'sentiment-analyzer-settings', 'sa_render_admin_settings_page', 'dashicons-chart-line', 30);
 }
 
 // Renter Admin Menu Page
@@ -301,7 +309,7 @@ function sa_render_admin_settings_page()
 ?>
     <div class="sa-admin-container">
 
-        <h1>Sentiment Keywords Options</h1>
+        <h1><?php _e('Sentiment Keywords Options', 'sa'); ?></h1>
         <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
             <?php
 
@@ -317,39 +325,39 @@ function sa_render_admin_settings_page()
 
             <table class="form-table">
                 <tr>
-                    <th scope="row"><label for="positiveKeywords">Positive Keywords</label></th>
+                    <th scope="row"><label for="positiveKeywords"><?php _e('Positive Keywords', 'sa'); ?></label></th>
                     <td>
                         <textarea name="sa_positive_keywords" cols="50" rows="10" id="positiveKeywords"><?php echo esc_attr(get_option('sa_positive_keywords')); ?></textarea>
-                        <p class="description">Configure Positive Keywords (Separate by comma)</p>
+                        <p class="description"><?php _e('Configure Positive Keywords (Separate by comma)', 'sa'); ?></p>
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="negativeKeywords">Negative Keywords</label></th>
+                    <th scope="row"><label for="negativeKeywords"><?php _e('Negative Keywords', 'sa'); ?></label></th>
                     <td>
                         <textarea name="sa_negative_keywords" cols="50" rows="10" id="negativeKeywords"><?php echo esc_attr(get_option('sa_negative_keywords')); ?></textarea>
-                        <p class="description">Configure Negative Keywords (Separate by comma)</p>
+                        <p class="description"><?php _e('Configure Negative Keywords (Separate by comma)', 'sa'); ?></p>
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="neutralKeywords">Neutral Keywords</label></th>
+                    <th scope="row"><label for="neutralKeywords"><?php _e('Neutral Keywords', 'sa'); ?></label></th>
                     <td>
                         <textarea name="sa_neutral_keywords" cols="50" rows="10" id="neutralKeywords"><?php echo esc_attr(get_option('sa_neutral_keywords')); ?></textarea>
-                        <p class="description">Configure Neutral Keywords (Separate by comma)</p>
+                        <p class="description"><?php _e('Configure Neutral Keywords (Separate by comma)', 'sa'); ?></p>
                     </td>
 
                 </tr>
 
                 <tr>
-                    <th scope="row"><label for="clearCache">Clear Cache</label></th>
+                    <th scope="row"><label for="clearCache"><?php _e('Clear Cache', 'sa'); ?></label></th>
                     <td>
                         <input type="checkbox" name="is_clear_cache" value="<?php echo $is_clear_cache; ?>" id="clearCache" <?php checked($is_clear_cache); ?>>
-                        <label for="clearCache">Select it if you want delete all caches on save changes</label> <br> <br>
-                        <button id="clearChacheNow" class="button button-primary">Clear Cache Now</button>
+                        <label for="clearCache"><?php _e('Select it if you want delete all caches on save changes', 'sa'); ?></label> <br> <br>
+                        <button id="clearChacheNow" class="button button-primary"><?php _e('Clear Cache Now', 'sa'); ?></button>
                     </td>
                 </tr>
 
             </table>
-            <?php submit_button(); ?>
+            <?php submit_button(__('Save Settings','sa')); ?>
         </form>
     </div>
 
@@ -419,14 +427,14 @@ function ajax_clear_all_caches()
 
     // Check if user allowed to clear cache
     if (!current_user_can('manage_options')) {
-        wp_send_json_error('Unauthorized access');
+        wp_send_json_error(__('Unauthorized access'));
     }
 
     // Send Success Response if cache Cleared successfully
     if (do_action('sa_clear_all_cache')) {
-        return wp_send_json_success(array('message' => 'Cache cleared successfully'), 200);
+        return wp_send_json_success(array('message' => __('Cache cleared successfully','sa')), 200);
     } else {
-        return wp_send_json_success(array('message' => 'Someting Went Wrong'), 200);
+        return wp_send_json_success(array('message' => __('Someting Went Wrong','sa')), 200);
     }
 
     return;

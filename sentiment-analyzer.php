@@ -5,7 +5,8 @@
  * Version: 1.0
  * Author: Md Ikram
  * Author Uri: http://programmerikram.com
- * Text Domain: sentiment-analyzer
+ * Text Domain: sa
+ * Domain Path: /languages
  */
 
 // Exit if accessed directly
@@ -21,6 +22,8 @@ define( 'SA_PLUGIN_DIR_URL', value: plugin_dir_url( __FILE__ ) );
 if( file_exists(SA_PLUGIN_DIR . 'includes/sentiment-functions.php') ) {
     require_once(SA_PLUGIN_DIR . 'includes/sentiment-functions.php');
 }
+
+add_action( 'init', 'sa_load_textdomain' );
 
 // Call Save Post hook
 add_action('save_post', 'sa_analyze_sentiment_on_save_post');

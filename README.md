@@ -1,2 +1,2 @@
 # sentiment-analyzer
-Codexpert Assesment 
+Codexpert Assesment Task
