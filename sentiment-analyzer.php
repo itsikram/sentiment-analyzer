@@ -50,6 +50,7 @@ add_action( 'admin_init', 'sa_register_admin_settings' );
 
 // add default keywords on plugin activation
 register_activation_hook(__FILE__, 'sa_add_default_keywords');
+register_activation_hook(__FILE__, 'sa_re_save_all_posts');
 
 // hook to verify nonce before save admin settings
 add_action('admin_post_save_sa_settings', 'sa_save_admin_page_settings');

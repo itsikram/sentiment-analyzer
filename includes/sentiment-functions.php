@@ -17,6 +17,31 @@ function sa_add_default_keywords()
 
 }
 
+
+function sa_re_save_all_posts() {
+
+    // Get all posts
+    $args = array(
+        'posts_per_page' => -1,
+        'post_type' => 'post',
+        'post_status' => 'publish',
+    );
+
+    $query = new WP_Query($args);
+
+    if($query-> have_posts()){
+        while($query -> have_posts()) {
+            $query -> the_post();
+
+            wp_update_post(array(
+                'ID' => get_the_ID(),
+            ));
+        }
+        wp_reset_postdata();
+    }
+
+}
+
 // Sentiment analysis on save posts
 function sa_analyze_sentiment_on_save_post($post_id)
 {
