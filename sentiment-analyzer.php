@@ -29,7 +29,10 @@ add_action( 'init', 'sa_load_textdomain' );
 add_action('save_post', 'sa_analyze_sentiment_on_save_post');
 add_action('save_post', 'sa_clear_sentiment_cache');
 
+
+// Call transient cache control hooks
 add_action('sa_clear_all_cache','sa_clear_all_cache_callback');
+add_action('set_transient' , 'disable_transient_cache');
 
 // Display Sentiment Badge with post title
 add_filter( 'the_title', 'sa_display_sentiment_badge' );

@@ -25,6 +25,7 @@ This plugin analyzes post content for sentiment (positive, negative, neutral) ba
 ## Usage
 - Sentiment analysis is done automatically on plugin activation and post save.
 - Shortcode `[sentiment_filter sentiment="positive|negative|neutral"]` can be used to display posts filtered by sentiment.
+- Sentiment keywords can be configured from `Sentiment Analyzer` admin menu page.
 - Cache can be cleared from `Sentiment Analyzer` admin menu page.
 
 ## License

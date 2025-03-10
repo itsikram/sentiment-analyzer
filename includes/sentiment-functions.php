@@ -1,11 +1,11 @@
 <?php
 
 // load text domain on init
-function sa_load_textdomain() {
+function sa_load_textdomain()
+{
 
-    $language_dir = dirname( plugin_basename( __FILE__ ) ) . '/languages';
-    load_plugin_textdomain( 'sa', false, $language_dir );
-
+    $language_dir = dirname(plugin_basename(__FILE__)) . '/languages';
+    load_plugin_textdomain('sa', false, $language_dir);
 }
 
 // Add or Get options on plugin activation
@@ -22,11 +22,17 @@ function sa_add_default_keywords()
     if (empty(get_option('sa_neutral_keywords'))) {
         update_option('sa_neutral_keywords', 'normal, average');
     }
-
+    if (empty(get_option('disable_cache'))) {
+        update_option('disable_cache', 'no');
+    }
+    if (empty(get_option('clear_cache'))) {
+        update_option('clear_cache', '1');
+    }
 }
 
 
-function sa_re_save_all_posts() {
+function sa_re_save_all_posts()
+{
 
     // Get all posts
     $args = array(
@@ -37,9 +43,9 @@ function sa_re_save_all_posts() {
 
     $query = new WP_Query($args);
 
-    if($query-> have_posts()){
-        while($query -> have_posts()) {
-            $query -> the_post();
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
 
             wp_update_post(array(
                 'ID' => get_the_ID(),
@@ -47,7 +53,6 @@ function sa_re_save_all_posts() {
         }
         wp_reset_postdata();
     }
-
 }
 
 // Sentiment analysis on save posts
@@ -96,7 +101,7 @@ function sa_analyze_sentiment_on_save_post($post_id)
 // Clear cache on save post
 function sa_clear_sentiment_cache($post_id)
 {
-    delete_transient('sa_cache_sentiment_' . $post_id);
+    do_action('sa_clear_all_cache');
 }
 
 // Clear entire cache
@@ -115,6 +120,19 @@ function sa_clear_all_cache_callback()
         delete_transient($key);
     }
     return;
+}
+
+// Disable transient chech
+function disable_transient_cache($transient, $value, $expiration)
+{
+    $is_disable_cache = get_option('disable_cache') == 'yes' ? '1' : '0';
+
+    if($is_disable_cache === '1') {
+        return false;
+    }
+    if (defined('WP_CACHE') && WP_CACHE) {
+        return false;
+    }
 }
 
 // keywords Counter function
@@ -144,7 +162,6 @@ function sa_display_sentiment_badge($title)
 
             $the_sentiment = ucwords(get_post_meta($post->ID, '_post_sentiment', true));
             set_transient('sa_cache_sentiment_' . $post->ID, $the_sentiment, 12 * HOUR_IN_SECONDS);
-
         }
 
         $sentiment_class = strtolower($the_sentiment);
@@ -164,7 +181,7 @@ function sa_filter_shortcode($atts, $content)
         'display' => 'list',
         'title' => '',
         'posts_per_page' => 3
-    ), $atts,'sentiment_filter');
+    ), $atts, 'sentiment_filter');
 
     // Get Current Page Number
     $paged = isset($_REQUEST['page_number']) ? sanitize_text_field($_REQUEST['page_number']) : 1;
@@ -180,12 +197,11 @@ function sa_filter_shortcode($atts, $content)
     $sentiment_post_per_page = $atts['posts_per_page'];
 
     // Create a unique cache transient kye
-    $sa_cache_posts_key = 'sa_cache_posts_html_' . md5(serialize($atts).$paged);
+    $sa_cache_posts_key = 'sa_cache_posts_html_' . md5(serialize($atts) . $paged);
 
     $sa_query_cache = get_transient($sa_cache_posts_key);
 
     if ($sa_query_cache !== false) {
-
         // return with current cache
         return $sa_query_cache;
     }
@@ -241,17 +257,16 @@ function sa_filter_shortcode($atts, $content)
 
                 $list_container .= '<h3 class="sa-list-title">' . $post_title . '</h3>';
                 $list_container .= '<p class="sa-list-content">' . $post_content . '</p>';
-                $list_container .= '<a class="sa-list-button" href="' . $post_permalink . '">'.__('Read More','sa').'</a>';
+                $list_container .= '<a class="sa-list-button" href="' . $post_permalink . '">' . __('Read More', 'sa') . '</a>';
 
                 $list_container .= '</a></div>';
                 $list_container .= '</li>';
             }
 
             $list_container .= '</ul>';
-            $list_paginations = '<div class="sa-list-pagination-container">'.$sa_pagination_links.'.</div>';
+            $list_paginations = '<div class="sa-list-pagination-container">' . $sa_pagination_links . '.</div>';
             $post_container .= $list_container;
             $post_container .= $list_paginations;
-            
         } elseif ($sentiment_display === 'grid') {
 
             $grid_container = '<div class="sa-grid-container">';
@@ -273,7 +288,7 @@ function sa_filter_shortcode($atts, $content)
                 $grid_container .= '<div class="sa-grid-content-container">';
                 $grid_container .= '<h3 class="sa-grid-title">' . $post_title . '</h3>';
                 $grid_container .= '<p class="sa-grid-content">' . $post_content . '</p>';
-                $grid_container .= '<a class="sa-grid-button" href="' . $post_permalink . '">'.__('Read More','sa').'</a>';
+                $grid_container .= '<a class="sa-grid-button" href="' . $post_permalink . '">' . __('Read More', 'sa') . '</a>';
                 $grid_container .= '</div>';
 
                 $grid_container .= '</a></div>';
@@ -281,20 +296,20 @@ function sa_filter_shortcode($atts, $content)
 
             $grid_container .= '</div>';
 
-            $grid_paginations = '<div class="sa-grid-pagination-container">'.$sa_pagination_links.'.</div>';
+            $grid_paginations = '<div class="sa-grid-pagination-container">' . $sa_pagination_links . '.</div>';
 
             $post_container .= $grid_container;
             $post_container .= $grid_paginations;
         }
     } else {
-        $post_container .= '<p class="no-post_found"> '.__('No Post Found','sa').' </p>';
+        $post_container .= '<p class="no-post_found"> ' . __('No Post Found', 'sa') . ' </p>';
     }
     $post_container .= '</div>';
 
     // Store Posts Cache
     set_transient($sa_cache_posts_key, $post_container, 24 * HOUR_IN_SECONDS);
 
-    
+
     return $post_container;
 }
 
@@ -317,7 +332,7 @@ function sa_admin_scripts()
 function sa_admin_settings_page()
 {
     // Add new page in wordpress dashboard menu
-    add_menu_page(__('Sentiment Analyzer Settings','sa'), __('Sentiment Analyzer','sa'), 'manage_options', 'sentiment-analyzer-settings', 'sa_render_admin_settings_page', 'dashicons-chart-line', 30);
+    add_menu_page(__('Sentiment Analyzer Settings', 'sa'), __('Sentiment Analyzer', 'sa'), 'manage_options', 'sentiment-analyzer-settings', 'sa_render_admin_settings_page', 'dashicons-chart-line', 30);
 }
 
 // Renter Admin Menu Page
@@ -333,6 +348,7 @@ function sa_render_admin_settings_page()
             settings_fields('sa_settings_group');
             do_settings_sections('sa_settings_group');
             $is_clear_cache = get_option('is_clear_cache');
+            $is_disable_cache = get_option('is_disable_cache');
 
             ?>
 
@@ -363,18 +379,25 @@ function sa_render_admin_settings_page()
                     </td>
 
                 </tr>
+                <tr>
+                    <th scope="row"><label for="disableCache"><?php _e('Disable Cache', 'sa'); ?></label></th>
+                    <td>
+                        <input type="checkbox" name="is_disable_cache" value="<?php echo $is_disable_cache; ?>" id="clearCache" <?php checked($is_disable_cache); ?>>
+                        <label for="clearCache"><?php _e('Select it if you want to disable all caches', 'sa'); ?></label> <br> <br>
+                    </td>
+                </tr>
 
                 <tr>
                     <th scope="row"><label for="clearCache"><?php _e('Clear Cache', 'sa'); ?></label></th>
                     <td>
                         <input type="checkbox" name="is_clear_cache" value="<?php echo $is_clear_cache; ?>" id="clearCache" <?php checked($is_clear_cache); ?>>
-                        <label for="clearCache"><?php _e('Select it if you want delete all caches on save changes', 'sa'); ?></label> <br> <br>
+                        <label for="clearCache"><?php _e('Select it if you want to delete all caches on save changes', 'sa'); ?></label> <br> <br>
                         <button id="clearChacheNow" class="button button-primary"><?php _e('Clear Cache Now', 'sa'); ?></button>
                     </td>
                 </tr>
 
             </table>
-            <?php submit_button(__('Save Settings','sa')); ?>
+            <?php submit_button(__('Save Settings', 'sa')); ?>
         </form>
     </div>
 
@@ -391,6 +414,7 @@ function sa_register_admin_settings()
     register_setting('sa_settings_group', 'sa_negative_keywords');
     register_setting('sa_settings_group', 'sa_neutral_keywords');
     register_setting('sa_settings_group', 'is_clear_cache');
+    register_setting('sa_settings_group', 'is_disable_cache');
 }
 
 function sa_save_admin_page_settings()
@@ -418,6 +442,15 @@ function sa_save_admin_page_settings()
 
     if (isset($_POST['sa_neutral_keywords'])) {
         update_option('sa_neutral_keywords', sanitize_text_field($_POST['sa_neutral_keywords']));
+    }
+
+    // Clear cache if checkbox is checked in admin settings page.
+    if (isset($_POST['is_disable_cache'])) {
+        update_option('is_disable_cache', '1');
+
+    }else {
+        update_option('is_disable_cache', '0');
+
     }
 
     // Clear cache if checkbox is checked in admin settings page.
@@ -449,9 +482,9 @@ function ajax_clear_all_caches()
 
     // Send Success Response if cache Cleared successfully
     if (do_action('sa_clear_all_cache')) {
-        return wp_send_json_success(array('message' => __('Cache cleared successfully','sa')), 200);
+        return wp_send_json_success(array('message' => __('Cache cleared successfully', 'sa')), 200);
     } else {
-        return wp_send_json_success(array('message' => __('Someting Went Wrong','sa')), 200);
+        return wp_send_json_success(array('message' => __('Someting Went Wrong', 'sa')), 200);
     }
 
     return;
