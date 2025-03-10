@@ -137,7 +137,7 @@ function sa_display_sentiment_badge($title)
 {
     global $post;
 
-    if (is_page()) {
+    if (is_page() || is_single()) {
         $the_sentiment = get_transient('sa_cache_sentiment_' . $post->ID);
 
         if ($the_sentiment === false) {
